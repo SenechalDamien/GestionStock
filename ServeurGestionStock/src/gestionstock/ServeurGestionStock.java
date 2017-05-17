@@ -35,9 +35,9 @@ public class ServeurGestionStock {
             AcessStock accesStock = new AcessStock();
             Naming.rebind("rmi://localhost/AccesStock", accesStock);
 
-            System.out.println("Addition Server is ready.");
+            System.out.println("GestionStock Server is ready.");
         } catch (Exception e) {
-            System.out.println("Addition Server failed: " + e);
+            System.out.println("GestionStock Server failed: " + e);
         }
     }
 
