@@ -65,5 +65,8 @@ public class Facture implements Serializable{
     public void setModePaiment(String ModePaiment) {
         this.ModePaiment = ModePaiment;
     }
-    
+    @Override
+    public String toString() {
+        return Id + " " + Nom + " " + Adresse + " " + Total + " " + ModePaiment; 
+    }
 }

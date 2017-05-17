@@ -65,7 +65,6 @@ public class Stock implements Serializable{
     public void setNbEnStock(int NbEnStock) {
         this.NbEnStock = NbEnStock;
     }
-    
     @Override
     public String toString()
     {
