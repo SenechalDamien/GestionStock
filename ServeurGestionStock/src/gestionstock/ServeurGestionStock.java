@@ -5,6 +5,9 @@
  */
 package gestionstock;
 
+import commun.Facture;
+import java.util.List;
+
 /**
  *
  * @author Damien
@@ -15,7 +18,8 @@ public class ServeurGestionStock {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        AccesFacture test = new AccesFacture();
+        List<Facture> result = test.findAll();
     }
-    
+
 }
