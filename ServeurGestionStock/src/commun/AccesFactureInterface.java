@@ -12,7 +12,7 @@ package commun;
 import java.rmi.*;
 import java.util.List;
 
-public interface AccesFactureInterface extends Remote {
-    
+public interface AccesFactureInterface extends Remote { 
     public List<Facture> findAll();
+    public void PayerFacture(int idFacture,String modePaiment);
 }
