@@ -75,7 +75,31 @@ public class AccesFacture extends UnicastRemoteObject implements AccesFactureInt
             System.out.println("Database connected!");
             Statement stmt = connection.createStatement();
             String query = "UPDATE facture SET ModePaiment='" + modePaiment + "' WHERE Reference='" + idFacture + "';";
-            stmt.executeQuery(query);
+            stmt.executeUpdate(query);
+
+        } catch (SQLException e) {
+            throw new IllegalStateException("Cannot connect the database!", e);
+        } catch (Exception ex) {
+            Logger.getLogger(AccesFacture.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    public void AddFacture(String nom, String adresse, float total) {
+        System.out.println("Facture.AddFacture()...");
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            String url = "jdbc:mysql://localhost:3306/stock";
+            String username = "root";
+            String password = "";
+
+            System.out.println("Connecting database...");
+
+            Connection connection = DriverManager.getConnection(url, username, password);
+            System.out.println("Database connected!");
+            Statement stmt = connection.createStatement();
+            String query = "INSERT INTO facture (Nom,Adresse,Total) VALUES ('" + nom + "','" + adresse +"','" + total + "');";
+            stmt.executeUpdate(query);
 
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect the database!", e);

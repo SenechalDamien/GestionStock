@@ -17,4 +17,6 @@ public interface AccesFactureInterface extends Remote {
     public List<Facture> findAll() throws RemoteException;
 
     public void PayerFacture(int idFacture, String modePaiment) throws RemoteException;
+
+    public void AddFacture(String nom, String adresse, float total) throws RemoteException;
 }
