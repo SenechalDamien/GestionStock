@@ -30,10 +30,10 @@ public class MainWindow extends javax.swing.JFrame {
     public MainWindow() {
         initComponents();
         try {
-            Remote r = Naming.lookup("rmi://localhost/AccesFacture");
+            Remote r = Naming.lookup("rmi://localhost/AccesStock");
             System.out.println(r);
-            if(r instanceof AccesFactureInterface) {
-                List<Facture> s = ((AccesFactureInterface) r).findAll();
+            if(r instanceof AccesStockInterface) {
+                List<Stock> s = ((AccesStockInterface) r).findAll();
                 System.out.println(s.isEmpty());
 
                 DefaultListModel model = new DefaultListModel();
@@ -43,6 +43,21 @@ public class MainWindow extends javax.swing.JFrame {
                 }
                 jList1.setModel(model);
             }
+                
+            r = Naming.lookup("rmi://localhost/AccesFacture");
+            System.out.println(r);
+            if (r instanceof AccesFactureInterface) {
+                List<Facture> s = ((AccesFactureInterface) r).findAll();
+                System.out.println(s.isEmpty());
+
+                DefaultListModel model = new DefaultListModel();
+                for (int i = 0; i < s.size(); i++) {
+                    model.addElement(s.get(i).toString());
+                    System.out.println(s.get(i).toString());
+                }
+                jList2.setModel(model);
+            }
+                
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (RemoteException e) {
