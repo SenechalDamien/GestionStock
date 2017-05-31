@@ -16,7 +16,9 @@ import javax.swing.ListModel;
 import commun.AccesStockInterface;
 import commun.Facture;
 import commun.Stock;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,6 +32,7 @@ public class MainWindow extends javax.swing.JFrame {
     private AccesFactureInterface factureInterface;
     private List<Stock> currentComponentList;
     private List<Facture> currentFactureList;
+    int currentTotalFacture = 0;
     /**
      * Creates new form MainWindow
      */
@@ -62,7 +65,6 @@ public class MainWindow extends javax.swing.JFrame {
         } catch (NotBoundException e){
             e.printStackTrace();
         }
-        
     }
 
     /**
@@ -82,13 +84,20 @@ public class MainWindow extends javax.swing.JFrame {
         AchatComposant = new javax.swing.JToggleButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        javax.swing.JTextField NombreAjout = new javax.swing.JTextField();
-        ReferenceAjout = new javax.swing.JTextField();
         AjoutProduit = new javax.swing.JToggleButton();
         numReference = new javax.swing.JTextField();
         RechercheComposant = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        NombreAjout = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        NomFacture = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        AdresseFacture = new javax.swing.JTextField();
+        javax.swing.JLabel jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        ValiderFacture = new javax.swing.JButton();
+        AnnulerFacture = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         NomModePaiement = new javax.swing.JTextField();
         PaiementFacture = new javax.swing.JButton();
@@ -114,11 +123,12 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel3.setText("Ajouter des produits :");
 
-        NombreAjout.setText("Nombre");
-
-        ReferenceAjout.setText("Référence");
-
         AjoutProduit.setText("Valider");
+        AjoutProduit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AjoutProduitActionPerformed(evt);
+            }
+        });
 
         numReference.setText("Référence");
 
@@ -135,6 +145,29 @@ public class MainWindow extends javax.swing.JFrame {
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane3.setViewportView(jList1);
+
+        NombreAjout.setText("Nombre");
+        NombreAjout.setToolTipText("");
+
+        jLabel4.setText("Nom :");
+
+        jLabel5.setText("Adresse :");
+
+        jLabel6.setText("Total : ");
+
+        ValiderFacture.setText("Valider Facture");
+        ValiderFacture.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ValiderFactureActionPerformed(evt);
+            }
+        });
+
+        AnnulerFacture.setText("Annuler Facture");
+        AnnulerFacture.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AnnulerFactureActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -159,13 +192,31 @@ public class MainWindow extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(NombreAjout, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ReferenceAjout)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(AjoutProduit)))
+                        .addComponent(AdresseFacture, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(AnnulerFacture, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(ValiderFacture, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(8, 8, 8)
+                                .addComponent(NombreAjout, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(AjoutProduit))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(50, 50, 50)
+                                .addComponent(NomFacture, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -187,18 +238,30 @@ public class MainWindow extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(NombreAjout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ReferenceAjout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AjoutProduit))
-                .addContainerGap(153, Short.MAX_VALUE))
+                    .addComponent(AjoutProduit)
+                    .addComponent(NombreAjout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(NomFacture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(AdresseFacture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ValiderFacture))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel6)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(AnnulerFacture))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
 
         NomFamille.getAccessibleContext().setAccessibleName("Famille");
         NombreAchat.getAccessibleContext().setAccessibleName("NombreAchat");
         jLabel2.getAccessibleContext().setAccessibleName("ErrorText");
         jLabel3.getAccessibleContext().setAccessibleName("");
-        NombreAjout.getAccessibleContext().setAccessibleName("NombreAjout");
-        ReferenceAjout.getAccessibleContext().setAccessibleName("ReferenceAjout");
         AjoutProduit.getAccessibleContext().setAccessibleName("ValidationAjout");
         numReference.getAccessibleContext().setAccessibleName("Reference");
         RechercheComposant.getAccessibleContext().setAccessibleName("ValiderRecherche");
@@ -255,7 +318,7 @@ public class MainWindow extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         pack();
@@ -285,6 +348,10 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_RechercheComposantActionPerformed
 
     private void AchatComposantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AchatComposantActionPerformed
+        //A modifier pour supporter l'edition de factures
+        //Retirer les produits de la base de donnée uniquement une fois la facture validée 
+        //(modifier la liste et l'affichage pendant l'édition, faire les changement en base à la validation (reporter le contenu de la liste)
+        //avec création facture et rafraichissement de la liste des factures
         int nombre = Integer.valueOf(NombreAchat.getText());
         int index = jList1.getSelectedIndex();
         if(index == -1){
@@ -305,6 +372,31 @@ public class MainWindow extends javax.swing.JFrame {
         }
         refreshStockDisplay();
     }//GEN-LAST:event_AchatComposantActionPerformed
+
+    private void AjoutProduitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AjoutProduitActionPerformed
+        int nombre = Integer.valueOf(NombreAjout.getText());
+        int index = jList1.getSelectedIndex();
+        if(index == -1){
+            jLabel2.setText("Pas de composant sélectionné");
+            return;
+        }
+        Stock stock = currentComponentList.get(jList1.getSelectedIndex());
+        try {
+            stockInterface.modifierNbComposantReference(stock.getNbEnStock() + nombre, stock.getReference());
+            stock.setNbEnStock(stock.getNbEnStock() + nombre);
+        } catch (RemoteException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        refreshStockDisplay();
+    }//GEN-LAST:event_AjoutProduitActionPerformed
+
+    private void ValiderFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ValiderFactureActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ValiderFactureActionPerformed
+
+    private void AnnulerFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnnulerFactureActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AnnulerFactureActionPerformed
 
     private void fillStockDisplay(List<Stock> s)
     {
@@ -385,16 +477,23 @@ public class MainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton AchatComposant;
+    private javax.swing.JTextField AdresseFacture;
     private javax.swing.JToggleButton AjoutProduit;
+    private javax.swing.JButton AnnulerFacture;
+    private javax.swing.JTextField NomFacture;
     private javax.swing.JTextField NomFamille;
     private javax.swing.JTextField NomModePaiement;
     private javax.swing.JTextField NombreAchat;
+    private javax.swing.JTextField NombreAjout;
     private javax.swing.JButton PaiementFacture;
     private javax.swing.JButton RechercheComposant;
-    private javax.swing.JTextField ReferenceAjout;
+    private javax.swing.JButton ValiderFacture;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JList<String> jList1;
     private javax.swing.JList<String> jList2;
     private javax.swing.JPanel jPanel1;
