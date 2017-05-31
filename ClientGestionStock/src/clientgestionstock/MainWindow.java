@@ -103,6 +103,11 @@ public class MainWindow extends javax.swing.JFrame {
         NombreAchat.setText("Nombre");
 
         AchatComposant.setText("Acheter");
+        AchatComposant.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AchatComposantActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Error");
 
@@ -265,8 +270,40 @@ public class MainWindow extends javax.swing.JFrame {
             } catch (RemoteException ex) {
                 Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
             }
+            return;
+        }
+        if(!reference.isEmpty()){
+            try {
+                List<Stock> stockFam = stockInterface.findAllByReference(reference);
+                fillStockDisplay(stockFam);
+            } catch (RemoteException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return;
         }
     }                                                  
+
+    private void AchatComposantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AchatComposantActionPerformed
+        int nombre = Integer.valueOf(NombreAchat.getText());
+        int index = jList1.getSelectedIndex();
+        if(index == -1){
+            jLabel2.setText("Pas de composant sélectionné");
+            return;
+        }
+        Stock stock = currentComponentList.get(jList1.getSelectedIndex());
+        if(stock.getNbEnStock() - nombre > 0)
+            stock.setNbEnStock(stock.getNbEnStock() - nombre);
+        else {
+            jLabel2.setText("Stock insuffisant");
+            return;
+        }
+        try {
+            stockInterface.modifierNbComposantId(stock.getNbEnStock(), stock.getId());
+        } catch (RemoteException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        refreshStockDisplay();
+    }//GEN-LAST:event_AchatComposantActionPerformed
 
     private void fillStockDisplay(List<Stock> s)
     {
@@ -286,6 +323,26 @@ public class MainWindow extends javax.swing.JFrame {
         for (int i = 0; i < f.size(); i++) {
             model.addElement(f.get(i).toString());
             System.out.println(f.get(i).toString());
+        }
+        jList2.setModel(model);
+    }
+    
+    private void refreshStockDisplay()
+    {
+        DefaultListModel model = new DefaultListModel();
+        for (int i = 0; i < currentComponentList.size(); i++) {
+            model.addElement(currentComponentList.get(i).toString());
+            System.out.println(currentComponentList.get(i).toString());
+        }
+        jList1.setModel(model);
+    }
+    
+    private void refreshFamilleDisplay()
+    {
+        DefaultListModel model = new DefaultListModel();
+        for (int i = 0; i < currentFactureList.size(); i++) {
+            model.addElement(currentFactureList.get(i).toString());
+            System.out.println(currentFactureList.get(i).toString());
         }
         jList2.setModel(model);
     }
