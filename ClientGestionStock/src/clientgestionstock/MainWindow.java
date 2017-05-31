@@ -12,7 +12,6 @@ import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import javax.swing.DefaultListModel;
-import javax.swing.ListModel;
 import commun.AccesStockInterface;
 import commun.Facture;
 import commun.Stock;
