@@ -137,8 +137,9 @@ public class AcessStock extends UnicastRemoteObject implements AccesStockInterfa
             Connection connection = DriverManager.getConnection(url, username, password);
             System.out.println("Database connected!");
             Statement stmt = connection.createStatement();
-            String query = "UPDATE composant SET NbEnStok='" + NewNbComposant + "' WHERE Id='" + IdComposant + "';";
-            stmt.executeQuery(query);
+            String query = "UPDATE composant SET NbEnStock='" + NewNbComposant + "' WHERE Id='" + IdComposant + "';";
+            System.out.println(query);
+            stmt.executeUpdate(query);
 
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect the database!", e);
@@ -161,8 +162,8 @@ public class AcessStock extends UnicastRemoteObject implements AccesStockInterfa
             Connection connection = DriverManager.getConnection(url, username, password);
             System.out.println("Database connected!");
             Statement stmt = connection.createStatement();
-            String query = "UPDATE composant SET NbEnStok='" + NewNbComposant + "' WHERE Reference='" + Reference + "';";
-            stmt.executeQuery(query);
+            String query = "UPDATE composant SET NbEnStock='" + NewNbComposant + "' WHERE Reference='" + Reference + "';";
+            stmt.executeUpdate(query);
 
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect the database!", e);
