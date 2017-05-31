@@ -56,27 +56,27 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel1" min="-2" pref="140" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
-                              <Component id="jTextField1" min="-2" pref="88" max="-2" attributes="0"/>
+                              <Component id="NomFamille" min="-2" pref="88" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTextField6" min="-2" pref="82" max="-2" attributes="0"/>
+                              <Component id="numReference" min="-2" pref="82" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                              <Component id="RechercheComposant" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="jTextField2" min="-2" pref="72" max="-2" attributes="0"/>
+                              <Component id="NombreAchat" min="-2" pref="72" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jToggleButton1" min="-2" max="-2" attributes="0"/>
+                              <Component id="AchatComposant" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel2" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel3" min="-2" pref="109" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTextField3" min="-2" pref="63" max="-2" attributes="0"/>
+                              <Component id="NombreAjout" min="-2" pref="63" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTextField4" max="32767" attributes="0"/>
+                              <Component id="ReferenceAjout" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jToggleButton2" min="-2" max="-2" attributes="0"/>
+                              <Component id="AjoutProduit" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -89,24 +89,24 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField6" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="NomFamille" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="numReference" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="RechercheComposant" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jScrollPane3" min="-2" pref="89" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jToggleButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="NombreAchat" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="AchatComposant" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField4" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jToggleButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="NombreAjout" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="ReferenceAjout" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="AjoutProduit" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="153" max="32767" attributes="0"/>
                   </Group>
@@ -119,7 +119,7 @@
                 <Property name="text" type="java.lang.String" value="Rechercher un composant :"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField1">
+            <Component class="javax.swing.JTextField" name="NomFamille">
               <Properties>
                 <Property name="text" type="java.lang.String" value="famille"/>
               </Properties>
@@ -127,7 +127,7 @@
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Famille"/>
               </AccessibilityProperties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField2">
+            <Component class="javax.swing.JTextField" name="NombreAchat">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Nombre"/>
               </Properties>
@@ -135,7 +135,7 @@
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="NombreAchat"/>
               </AccessibilityProperties>
             </Component>
-            <Component class="javax.swing.JToggleButton" name="jToggleButton1">
+            <Component class="javax.swing.JToggleButton" name="AchatComposant">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Acheter"/>
               </Properties>
@@ -156,15 +156,19 @@
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=""/>
               </AccessibilityProperties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField3">
+            <Component class="javax.swing.JTextField" name="NombreAjout">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Nombre"/>
               </Properties>
               <AccessibilityProperties>
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="NombreAjout"/>
               </AccessibilityProperties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+              </AuxValues>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField4">
+            <Component class="javax.swing.JTextField" name="ReferenceAjout">
               <Properties>
                 <Property name="text" type="java.lang.String" value="R&#xe9;f&#xe9;rence"/>
               </Properties>
@@ -172,7 +176,7 @@
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="ReferenceAjout"/>
               </AccessibilityProperties>
             </Component>
-            <Component class="javax.swing.JToggleButton" name="jToggleButton2">
+            <Component class="javax.swing.JToggleButton" name="AjoutProduit">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Valider"/>
               </Properties>
@@ -180,7 +184,7 @@
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="ValidationAjout"/>
               </AccessibilityProperties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField6">
+            <Component class="javax.swing.JTextField" name="numReference">
               <Properties>
                 <Property name="text" type="java.lang.String" value="R&#xe9;f&#xe9;rence"/>
               </Properties>
@@ -188,13 +192,16 @@
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Reference"/>
               </AccessibilityProperties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton2">
+            <Component class="javax.swing.JButton" name="RechercheComposant">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Valider"/>
               </Properties>
               <AccessibilityProperties>
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="ValiderRecherche"/>
               </AccessibilityProperties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="RechercheComposantActionPerformed"/>
+              </Events>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane3">
               <AuxValues>
@@ -240,9 +247,9 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jScrollPane4" min="-2" pref="384" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="jTextField5" min="-2" pref="121" max="-2" attributes="0"/>
+                              <Component id="NomModePaiement" min="-2" pref="121" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                              <Component id="PaiementFacture" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace pref="17" max="32767" attributes="0"/>
@@ -256,8 +263,8 @@
                       <Component id="jScrollPane4" min="-2" pref="88" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTextField5" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="NomModePaiement" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="PaiementFacture" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="209" max="32767" attributes="0"/>
                   </Group>
@@ -265,7 +272,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JTextField" name="jTextField5">
+            <Component class="javax.swing.JTextField" name="NomModePaiement">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Mode de paiement"/>
               </Properties>
@@ -273,7 +280,7 @@
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="ModePaiement"/>
               </AccessibilityProperties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton1">
+            <Component class="javax.swing.JButton" name="PaiementFacture">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Paiement"/>
               </Properties>
