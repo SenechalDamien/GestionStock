@@ -271,6 +271,11 @@ public class MainWindow extends javax.swing.JFrame {
         NomModePaiement.setText("Mode de paiement");
 
         PaiementFacture.setText("Paiement");
+        PaiementFacture.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PaiementFactureActionPerformed(evt);
+            }
+        });
 
         jList2.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -443,6 +448,10 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel7.setText(Float.toString(currentTotalFacture));
     }//GEN-LAST:event_AnnulerFactureActionPerformed
 
+    private void PaiementFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PaiementFactureActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PaiementFactureActionPerformed
+    
     private void fillStockDisplay(List<Stock> s)
     {
         currentComponentList = s;
