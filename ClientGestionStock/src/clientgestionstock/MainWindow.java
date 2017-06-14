@@ -32,7 +32,7 @@ public class MainWindow extends javax.swing.JFrame {
     private AccesFactureInterface factureInterface;
     private List<Stock> currentComponentList;
     private List<Facture> currentFactureList;
-    int currentTotalFacture = 0;
+    float currentTotalFacture = 0;
     /**
      * Creates new form MainWindow
      */
@@ -359,17 +359,18 @@ public class MainWindow extends javax.swing.JFrame {
             return;
         }
         Stock stock = currentComponentList.get(jList1.getSelectedIndex());
-        if(stock.getNbEnStock() - nombre > 0)
+        if(stock.getNbEnStock() - nombre > 0){
             stock.setNbEnStock(stock.getNbEnStock() - nombre);
-        else {
+            currentTotalFacture += stock.getPrixUnitaire() * nombre;
+        } else {
             jLabel2.setText("Stock insuffisant");
             return;
         }
-        try {
+        /*try {
             stockInterface.modifierNbComposantId(stock.getNbEnStock(), stock.getId());
         } catch (RemoteException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         refreshStockDisplay();
     }//GEN-LAST:event_AchatComposantActionPerformed
 
@@ -392,6 +393,22 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void ValiderFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ValiderFactureActionPerformed
         // TODO add your handling code here:
+        if(NomFacture.getText().isEmpty() || AdresseFacture.getText().isEmpty()){
+            jLabel2.setText("Les champs obligatoire ne sont pas remplis");
+            return;
+        }
+            
+        Stock stock;
+        for (int i = 0; i < currentComponentList.size(); i++) {
+            stock = currentComponentList.get(i);
+            try {
+                factureInterface.addFacture(NomFacture.getText(), AdresseFacture.getText(), currentTotalFacture);
+                stockInterface.modifierNbComposantId(stock.getNbEnStock(), stock.getId());
+                currentTotalFacture = 0;
+            } catch (RemoteException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_ValiderFactureActionPerformed
 
     private void AnnulerFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnnulerFactureActionPerformed
