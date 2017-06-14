@@ -392,6 +392,10 @@ public class MainWindow extends javax.swing.JFrame {
             return;
         }
         Stock stock = currentComponentList.get(jList1.getSelectedIndex());
+        if(stock.getNbEnStock()+nombre>1000){
+            jLabel2.setText("Stock de "+stock.getReference()+" supérieur à 1000");
+            return;
+        }
         try {
             stockInterface.modifierNbComposantReference(stock.getNbEnStock() + nombre, stock.getReference());
             stock.setNbEnStock(stock.getNbEnStock() + nombre);
@@ -445,10 +449,10 @@ public class MainWindow extends javax.swing.JFrame {
     private void PaiementFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PaiementFactureActionPerformed
         String payment = NomModePaiement.getText();
         int index = jList2.getSelectedIndex();
-        /*if(index == -1){
-            jLabel2.setText("Pas de composant sélectionné");
+        if(index == -1){
+            ErreurFacture.setText("Pas de facture sélectionnée");
             return;
-        }*/
+        }
         Facture stock = currentFactureList.get(index);
         stock.setModePaiment(payment);
         try {
