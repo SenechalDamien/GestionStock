@@ -74,7 +74,8 @@ public class AccesFacture extends UnicastRemoteObject implements AccesFactureInt
             Connection connection = DriverManager.getConnection(url, username, password);
             System.out.println("Database connected!");
             Statement stmt = connection.createStatement();
-            String query = "UPDATE facture SET ModePaiment='" + modePaiment + "' WHERE Reference='" + idFacture + "';";
+            String query = "UPDATE facture SET ModePaiment='" + modePaiment + "' WHERE Id='" + idFacture + "';";
+            System.out.println(query);
             stmt.executeUpdate(query);
 
         } catch (SQLException e) {
@@ -98,7 +99,7 @@ public class AccesFacture extends UnicastRemoteObject implements AccesFactureInt
             Connection connection = DriverManager.getConnection(url, username, password);
             System.out.println("Database connected!");
             Statement stmt = connection.createStatement();
-            String query = "INSERT INTO facture (Nom,Adresse,Total) VALUES ('" + nom + "','" + adresse +"','" + total + "');";
+            String query = "INSERT INTO facture (Nom,Adresse,Total,ModePaiment) VALUES ('" + nom + "','" + adresse +"','" + total + "','Impayée');";
             stmt.executeUpdate(query);
 
         } catch (SQLException e) {

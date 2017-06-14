@@ -449,7 +449,20 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_AnnulerFactureActionPerformed
 
     private void PaiementFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PaiementFactureActionPerformed
-        // TODO add your handling code here:
+        String payment = NomModePaiement.getText();
+        int index = jList2.getSelectedIndex();
+        /*if(index == -1){
+            jLabel2.setText("Pas de composant sélectionné");
+            return;
+        }*/
+        Facture stock = currentFactureList.get(index);
+        stock.setModePaiment(payment);
+        try {
+            factureInterface.PayerFacture(stock.getId(), payment);
+        } catch (RemoteException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        refreshFactureDisplay();
     }//GEN-LAST:event_PaiementFactureActionPerformed
     
     private void fillStockDisplay(List<Stock> s)
@@ -484,7 +497,7 @@ public class MainWindow extends javax.swing.JFrame {
         jList1.setModel(model);
     }
     
-    private void refreshFamilleDisplay()
+    private void refreshFactureDisplay()
     {
         DefaultListModel model = new DefaultListModel();
         for (int i = 0; i < currentFactureList.size(); i++) {
