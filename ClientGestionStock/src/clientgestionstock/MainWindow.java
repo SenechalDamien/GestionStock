@@ -412,7 +412,32 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_ValiderFactureActionPerformed
 
     private void AnnulerFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnnulerFactureActionPerformed
-        // TODO add your handling code here:
+       // Recharge les données de la base
+        try {
+            Remote r = Naming.lookup("rmi://localhost/AccesStock");
+            System.out.println(r);
+            if(r instanceof AccesStockInterface) {
+                stockInterface = (AccesStockInterface) r;
+                List<Stock> s = ((AccesStockInterface) r).findAll();
+                System.out.println(s.isEmpty());
+                fillStockDisplay(s);
+
+            }
+                
+            Remote r2 = Naming.lookup("rmi://localhost/AccesFacture");
+            System.out.println(r2);
+            if (r2 instanceof AccesFactureInterface) {
+                factureInterface = (AccesFactureInterface) r2;
+                List<Facture> s = ((AccesFactureInterface) r2).findAll();
+                System.out.println(s.isEmpty());
+                fillFactureDisplay(s);
+            }
+                
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // total a 0
+        currentTotalFacture = 0;
     }//GEN-LAST:event_AnnulerFactureActionPerformed
 
     private void fillStockDisplay(List<Stock> s)
