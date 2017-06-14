@@ -362,6 +362,7 @@ public class MainWindow extends javax.swing.JFrame {
         if(stock.getNbEnStock() - nombre > 0){
             stock.setNbEnStock(stock.getNbEnStock() - nombre);
             currentTotalFacture += stock.getPrixUnitaire() * nombre;
+            jLabel7.setText(Float.toString(currentTotalFacture));
         } else {
             jLabel2.setText("Stock insuffisant");
             return;
@@ -402,9 +403,10 @@ public class MainWindow extends javax.swing.JFrame {
         for (int i = 0; i < currentComponentList.size(); i++) {
             stock = currentComponentList.get(i);
             try {
-                factureInterface.addFacture(NomFacture.getText(), AdresseFacture.getText(), currentTotalFacture);
+                factureInterface.AddFacture(NomFacture.getText(), AdresseFacture.getText(), currentTotalFacture);
                 stockInterface.modifierNbComposantId(stock.getNbEnStock(), stock.getId());
                 currentTotalFacture = 0;
+                jLabel7.setText(Float.toString(currentTotalFacture));
             } catch (RemoteException ex) {
                 Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -438,6 +440,7 @@ public class MainWindow extends javax.swing.JFrame {
         }
         // total a 0
         currentTotalFacture = 0;
+        jLabel7.setText(Float.toString(currentTotalFacture));
     }//GEN-LAST:event_AnnulerFactureActionPerformed
 
     private void fillStockDisplay(List<Stock> s)
