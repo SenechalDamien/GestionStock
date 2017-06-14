@@ -408,40 +408,30 @@ public class MainWindow extends javax.swing.JFrame {
         for (int i = 0; i < currentComponentList.size(); i++) {
             stock = currentComponentList.get(i);
             try {
-                factureInterface.AddFacture(NomFacture.getText(), AdresseFacture.getText(), currentTotalFacture);
                 stockInterface.modifierNbComposantId(stock.getNbEnStock(), stock.getId());
-                currentTotalFacture = 0;
-                jLabel7.setText(Float.toString(currentTotalFacture));
             } catch (RemoteException ex) {
                 Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        try {
+            factureInterface.AddFacture(NomFacture.getText(), AdresseFacture.getText(), currentTotalFacture);
+            currentTotalFacture = 0;
+            jLabel7.setText(Float.toString(currentTotalFacture));
+            List<Facture> s = factureInterface.findAll();
+            fillFactureDisplay(s);
+        } catch (RemoteException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_ValiderFactureActionPerformed
 
     private void AnnulerFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnnulerFactureActionPerformed
-       // Recharge les données de la base
         try {
-            Remote r = Naming.lookup("rmi://localhost/AccesStock");
-            System.out.println(r);
-            if(r instanceof AccesStockInterface) {
-                stockInterface = (AccesStockInterface) r;
-                List<Stock> s = ((AccesStockInterface) r).findAll();
-                System.out.println(s.isEmpty());
-                fillStockDisplay(s);
-
-            }
-                
-            Remote r2 = Naming.lookup("rmi://localhost/AccesFacture");
-            System.out.println(r2);
-            if (r2 instanceof AccesFactureInterface) {
-                factureInterface = (AccesFactureInterface) r2;
-                List<Facture> s = ((AccesFactureInterface) r2).findAll();
-                System.out.println(s.isEmpty());
-                fillFactureDisplay(s);
-            }
-                
-        } catch (Exception e) {
-            e.printStackTrace();
+            // Recharge les données de la base
+            List<Stock> s = stockInterface.findAll();
+            fillStockDisplay(s);
+        } catch (RemoteException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
         // total a 0
         currentTotalFacture = 0;
