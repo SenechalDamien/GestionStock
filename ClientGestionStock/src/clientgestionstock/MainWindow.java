@@ -32,12 +32,15 @@ public class MainWindow extends javax.swing.JFrame {
     private AccesFactureInterface factureInterface;
     private List<Stock> currentComponentList;
     private List<Facture> currentFactureList;
-    private ComponentTableModel tableModel = new ComponentTableModel();
+    private ComponentTableModel componentTableModel;
+    private FactureTableModel factureTableModel;
     float currentTotalFacture = 0;
     /**
      * Creates new form MainWindow
      */
     public MainWindow() {
+        this.componentTableModel = new ComponentTableModel();
+        factureTableModel = new FactureTableModel();
         initComponents();
         try {
             Remote r = Naming.lookup("rmi://localhost/AccesStock");
@@ -66,8 +69,11 @@ public class MainWindow extends javax.swing.JFrame {
         } catch (NotBoundException e){
             e.printStackTrace();
         }
-        tableModel.setComponentList(currentComponentList);
-        jTable1.setModel(tableModel);
+        componentTableModel.setComponentList(currentComponentList);
+        jTable1.setModel(componentTableModel);
+        
+        factureTableModel.setFactureList(currentFactureList);
+        jTable2.setModel(factureTableModel);
     }
 
     /**
@@ -83,9 +89,9 @@ public class MainWindow extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         NomModePaiement = new javax.swing.JTextField();
         PaiementFacture = new javax.swing.JButton();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
         ErreurFacture = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         NomFamille = new javax.swing.JTextField();
@@ -119,12 +125,18 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        jList2.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane4.setViewportView(jList2);
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -132,28 +144,28 @@ public class MainWindow extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(NomModePaiement, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(PaiementFacture)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ErreurFacture, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(596, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ErreurFacture, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(NomModePaiement, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(PaiementFacture)))
-                .addGap(209, 209, 209))
+                        .addComponent(PaiementFacture))
+                    .addComponent(ErreurFacture, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(297, Short.MAX_VALUE))
         );
 
         NomModePaiement.getAccessibleContext().setAccessibleName("ModePaiement");
@@ -253,7 +265,7 @@ public class MainWindow extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(AchatComposant)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE))
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -296,7 +308,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(NomFamille, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(numReference, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(RechercheComposant))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -343,12 +355,14 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 995, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(226, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -473,7 +487,8 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void PaiementFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PaiementFactureActionPerformed
         String payment = NomModePaiement.getText();
-        int index = jList2.getSelectedIndex();
+        //int index = jList2.getSelectedIndex();
+        int index = jTable2.getSelectedRow();
         if(index == -1){
             ErreurFacture.setText("Pas de facture sélectionnée");
             return;
@@ -497,7 +512,7 @@ public class MainWindow extends javax.swing.JFrame {
             System.out.println(s.get(i).toString());
         }
         //jList1.setModel(model);
-        tableModel.setComponentList(currentComponentList);
+        componentTableModel.setComponentList(currentComponentList);
     }
     
     private void fillFactureDisplay(List<Facture> f)
@@ -508,7 +523,8 @@ public class MainWindow extends javax.swing.JFrame {
             model.addElement(f.get(i).toString());
             System.out.println(f.get(i).toString());
         }
-        jList2.setModel(model);
+        //jList2.setModel(model);
+        factureTableModel.setFactureList(currentFactureList);
     }
     
     private void refreshStockDisplay()
@@ -519,7 +535,7 @@ public class MainWindow extends javax.swing.JFrame {
             System.out.println(currentComponentList.get(i).toString());
         }
         //jList1.setModel(model);
-        tableModel.setComponentList(currentComponentList);
+        componentTableModel.setComponentList(currentComponentList);
 
     }
     
@@ -530,7 +546,7 @@ public class MainWindow extends javax.swing.JFrame {
             model.addElement(currentFactureList.get(i).toString());
             System.out.println(currentFactureList.get(i).toString());
         }
-        jList2.setModel(model);
+        factureTableModel.setFactureList(currentFactureList);
     }
     
     /**
@@ -588,13 +604,13 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JList<String> jList2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
     private javax.swing.JTextField numReference;
     // End of variables declaration//GEN-END:variables
 }
