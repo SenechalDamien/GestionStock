@@ -11,12 +11,11 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import javax.swing.DefaultListModel;
-import javax.swing.ListModel;
 import commun.AccesStockInterface;
 import commun.Facture;
 import commun.Stock;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -31,6 +30,7 @@ public class MainWindow extends javax.swing.JFrame {
     private AccesStockInterface stockInterface;
     private AccesFactureInterface factureInterface;
     private List<Stock> currentComponentList;
+    private Map<Stock, Integer> productsInTheCurrentFacture;
     private List<Facture> currentFactureList;
     private ComponentTableModel componentTableModel;
     private FactureTableModel factureTableModel;
@@ -39,6 +39,7 @@ public class MainWindow extends javax.swing.JFrame {
      * Creates new form MainWindow
      */
     public MainWindow() {
+        productsInTheCurrentFacture = new HashMap<Stock, Integer>();
         this.componentTableModel = new ComponentTableModel();
         factureTableModel = new FactureTableModel();
         initComponents();
@@ -145,21 +146,23 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(NomModePaiement, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(PaiementFacture)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ErreurFacture, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(462, 462, 462)
+                        .addComponent(ErreurFacture, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(23, 23, 23)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(NomModePaiement, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -374,8 +377,8 @@ public class MainWindow extends javax.swing.JFrame {
         String reference = numReference.getText();
         if(!famille.isEmpty()){
             try {
-                List<Stock> stockFam = stockInterface.findAllByFamille(famille);
-                fillStockDisplay(stockFam);
+                currentComponentList = stockInterface.findAllByFamille(famille);
+                refreshStockDisplay();
             } catch (RemoteException ex) {
                 Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -383,8 +386,8 @@ public class MainWindow extends javax.swing.JFrame {
         }
         if(!reference.isEmpty()){
             try {
-                List<Stock> stockFam = stockInterface.findAllByReference(reference);
-                fillStockDisplay(stockFam);
+                currentComponentList = stockInterface.findAllByReference(reference);
+                refreshStockDisplay();
             } catch (RemoteException ex) {
                 Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -393,55 +396,79 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_RechercheComposantActionPerformed
 
     private void AchatComposantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AchatComposantActionPerformed
-        //A modifier pour supporter l'edition de factures
-        //Retirer les produits de la base de donnée uniquement une fois la facture validée 
-        //(modifier la liste et l'affichage pendant l'édition, faire les changement en base à la validation (reporter le contenu de la liste)
-        //avec création facture et rafraichissement de la liste des factures
-        int nombre = Integer.valueOf(NombreAchat.getText());
-        //int index = jList1.getSelectedIndex();
+        int nombre = 0;
+        try {
+        nombre = Integer.valueOf(NombreAchat.getText());
+        } catch (NumberFormatException e){
+            jLabel2.setText("Le nombre saisi n'est pas valide");
+            return;
+        }
         int index = jTable1.getSelectedRow();
-
         if(index == -1){
             jLabel2.setText("Pas de composant sélectionné");
             return;
         }
+                
         Stock stock = currentComponentList.get(index);
         if(stock.getNbEnStock() - nombre > 0){
-            stock.setNbEnStock(stock.getNbEnStock() - nombre);
+            //mise à jour du nb de composants dans la liste et dans la bdd
+            try {
+                if(stockInterface.ajouterComposantsId(-nombre, stock.getId())){
+                    stock.setNbEnStock(stock.getNbEnStock() - nombre);
+                    refreshStockDisplay();
+                }
+                else{
+                    jLabel2.setText("Nombre de composants incorrect");
+                    return;
+                }
+                    
+                //stockInterface.modifierNbComposantId(stock.getNbEnStock(), stock.getId());
+            } catch (RemoteException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                jLabel2.setText("Impossible d'accéder à la base de donnée");
+                return;
+            }
+            Integer value = productsInTheCurrentFacture.put(stock, nombre);
+            //cas où un nombre de ce composant à déjà été ajouté
+            if(value  != null)
+                productsInTheCurrentFacture.put(stock, value + nombre);
             currentTotalFacture += stock.getPrixUnitaire() * nombre;
             jLabel7.setText(Float.toString(currentTotalFacture));
         } else {
             jLabel2.setText("Stock insuffisant");
             return;
         }
-        /*try {
-            stockInterface.modifierNbComposantId(stock.getNbEnStock(), stock.getId());
-        } catch (RemoteException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-        refreshStockDisplay();
     }//GEN-LAST:event_AchatComposantActionPerformed
 
     private void AjoutProduitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AjoutProduitActionPerformed
-        int nombre = Integer.valueOf(NombreAjout.getText());
+        int nombre;
+        try {
+        nombre = Integer.valueOf(NombreAjout.getText());
+        } catch (NumberFormatException e){
+            jLabel2.setText("Le nombre saisi n'est pas valide");
+            return;
+        }
         //int index = jList1.getSelectedIndex();
         int index = jTable1.getSelectedRow();
         if(index == -1){
             jLabel2.setText("Pas de composant sélectionné");
             return;
         }
+
+        //Ajout des produits
         Stock stock = currentComponentList.get(index);
-        if(stock.getNbEnStock()+nombre>1000){
-            jLabel2.setText("Stock de "+stock.getReference()+" supérieur à 1000");
-            return;
-        }
         try {
-            stockInterface.modifierNbComposantReference(stock.getNbEnStock() + nombre, stock.getReference());
-            stock.setNbEnStock(stock.getNbEnStock() + nombre);
+            if(stockInterface.ajouterComposantsId(nombre, stock.getId())){
+                stock.setNbEnStock(stock.getNbEnStock() + nombre);
+                refreshStockDisplay();
+            }
+            else {
+                jLabel2.setText("Nombre de composants incorrect");
+                return;
+            }
         } catch (RemoteException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
-        refreshStockDisplay();
     }//GEN-LAST:event_AjoutProduitActionPerformed
 
     private void ValiderFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ValiderFactureActionPerformed
@@ -450,33 +477,40 @@ public class MainWindow extends javax.swing.JFrame {
             jLabel2.setText("Les champs obligatoire ne sont pas remplis");
             return;
         }
-            
-        Stock stock;
-        for (int i = 0; i < currentComponentList.size(); i++) {
-            stock = currentComponentList.get(i);
-            try {
-                stockInterface.modifierNbComposantId(stock.getNbEnStock(), stock.getId());
-            } catch (RemoteException ex) {
-                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+       
         try {
             factureInterface.AddFacture(NomFacture.getText(), AdresseFacture.getText(), currentTotalFacture);
             currentTotalFacture = 0;
             jLabel7.setText(Float.toString(currentTotalFacture));
-            List<Facture> s = factureInterface.findAll();
-            fillFactureDisplay(s);
+            currentFactureList = factureInterface.findAll();
+            fillFactureDisplay(currentFactureList);
+            currentComponentList = stockInterface.findAll();
+            refreshStockDisplay();
         } catch (RemoteException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        productsInTheCurrentFacture.clear();
     }//GEN-LAST:event_ValiderFactureActionPerformed
 
     private void AnnulerFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnnulerFactureActionPerformed
+        
+        Iterator i = productsInTheCurrentFacture.keySet().iterator();
+        Stock stock;
+        Integer nombre;
+        while(i.hasNext()){
+            stock = (Stock)i.next();
+            nombre = (Integer) productsInTheCurrentFacture.get(stock);
+            try {
+                stockInterface.ajouterComposantsId(nombre, stock.getId());
+            } catch (RemoteException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
         try {
             // Recharge les données de la base
-            List<Stock> s = stockInterface.findAll();
-            fillStockDisplay(s);
+            currentComponentList = stockInterface.findAll();
+            refreshStockDisplay();
         } catch (RemoteException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -505,84 +539,24 @@ public class MainWindow extends javax.swing.JFrame {
     
     private void fillStockDisplay(List<Stock> s)
     {
-        currentComponentList = s;
-        DefaultListModel model = new DefaultListModel();
-        for (int i = 0; i < s.size(); i++) {
-            model.addElement(s.get(i).toString());
-            System.out.println(s.get(i).toString());
-        }
-        //jList1.setModel(model);
         componentTableModel.setComponentList(currentComponentList);
     }
     
     private void fillFactureDisplay(List<Facture> f)
     {
-        currentFactureList = f;
-        DefaultListModel model = new DefaultListModel();
-        for (int i = 0; i < f.size(); i++) {
-            model.addElement(f.get(i).toString());
-            System.out.println(f.get(i).toString());
-        }
-        //jList2.setModel(model);
         factureTableModel.setFactureList(currentFactureList);
     }
     
     private void refreshStockDisplay()
     {
-        DefaultListModel model = new DefaultListModel();
-        for (int i = 0; i < currentComponentList.size(); i++) {
-            model.addElement(currentComponentList.get(i).toString());
-            System.out.println(currentComponentList.get(i).toString());
-        }
-        //jList1.setModel(model);
         componentTableModel.setComponentList(currentComponentList);
-
     }
     
     private void refreshFactureDisplay()
     {
-        DefaultListModel model = new DefaultListModel();
-        for (int i = 0; i < currentFactureList.size(); i++) {
-            model.addElement(currentFactureList.get(i).toString());
-            System.out.println(currentFactureList.get(i).toString());
-        }
         factureTableModel.setFactureList(currentFactureList);
     }
     
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainWindow().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton AchatComposant;

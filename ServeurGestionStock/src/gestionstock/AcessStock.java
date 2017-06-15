@@ -171,4 +171,39 @@ public class AcessStock extends UnicastRemoteObject implements AccesStockInterfa
             Logger.getLogger(AccesFacture.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    @Override
+    public boolean ajouterComposantsId(int nbCompAdded, int Id) {
+
+        System.out.println("Composant.modifierNbComposantId()...");
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            String url = "jdbc:mysql://localhost:3306/stock";
+            String username = "root";
+            String password = "";
+
+            System.out.println("Connecting database...");
+
+            Connection connection = DriverManager.getConnection(url, username, password);
+            System.out.println("Database connected!");
+            
+            Statement stmt = connection.createStatement();
+            String query = "SELECT * FROM composant WHERE Id = " + String.valueOf(Id) + ";";
+            ResultSet rs = stmt.executeQuery(query);
+
+            if(!rs.first())
+                return false;
+            commun.Stock stock = new commun.Stock(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getFloat(4), rs.getInt(5));
+            int newCompNb = stock.getNbEnStock() + nbCompAdded;
+            if(newCompNb < 0 || newCompNb > 1000)
+                return false;
+            modifierNbComposantId(stock.getNbEnStock() + nbCompAdded, Id);
+            return true;
+        } catch (SQLException e) {
+            throw new IllegalStateException("Cannot connect the database!", e);
+        } catch (Exception ex) {
+            Logger.getLogger(AccesFacture.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 }

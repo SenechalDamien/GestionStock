@@ -25,7 +25,7 @@ public class Stock implements Serializable{
         this.PrixUnitaire = PrixUnitaire;
         this.NbEnStock = NbEnStock;
     }
-
+    
     public int getId() {
         return id;
     }

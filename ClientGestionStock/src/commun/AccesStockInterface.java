@@ -23,4 +23,6 @@ public interface AccesStockInterface extends Remote {
     public void modifierNbComposantId(int NewNbComposant, int IdComposant) throws RemoteException;
 
     public void modifierNbComposantReference(int NewNbComposant, String Reference) throws RemoteException;
+    
+    public boolean ajouterComposantsId(int nbCompAdded, int Id) throws RemoteException;
 }
