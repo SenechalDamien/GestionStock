@@ -139,7 +139,7 @@ public class AcessStock extends UnicastRemoteObject implements AccesStockInterfa
             Connection connection = DriverManager.getConnection(url, username, password);
             System.out.println("Database connected!");
             Statement stmt = connection.createStatement();
-            String query = "SELECT * FROM composant WHERE Famille LIKE '%" + Famille + "%' or Reference LIKE '%" + Reference + "%';";
+            String query = "SELECT * FROM composant WHERE Famille LIKE '%" + Famille + "%' AND Reference LIKE '%" + Reference + "%';";
             ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
