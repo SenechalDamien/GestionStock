@@ -402,23 +402,29 @@ public class MainWindow extends javax.swing.JFrame {
     private void RechercheComposantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RechercheComposantActionPerformed
         String famille = NomFamille.getText();
         String reference = numReference.getText();
-        if(!famille.isEmpty()){
+        if(!famille.isEmpty() && reference.isEmpty()){
             try {
                 currentComponentList = stockInterface.findAllByFamille(famille);
                 refreshStockDisplay();
             } catch (RemoteException ex) {
                 Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return;
         }
-        if(!reference.isEmpty()){
+        else if(!reference.isEmpty() && famille.isEmpty()){
             try {
                 currentComponentList = stockInterface.findAllByReference(reference);
                 refreshStockDisplay();
             } catch (RemoteException ex) {
                 Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return;
+        }
+        else{
+            try {
+                currentComponentList = stockInterface.findAllByFamilleAndReference(famille, reference);
+                refreshStockDisplay();
+            } catch (RemoteException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_RechercheComposantActionPerformed
 

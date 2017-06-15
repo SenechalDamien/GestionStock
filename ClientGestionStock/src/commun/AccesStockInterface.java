@@ -25,4 +25,7 @@ public interface AccesStockInterface extends Remote {
     public void modifierNbComposantReference(int NewNbComposant, String Reference) throws RemoteException;
     
     public boolean ajouterComposantsId(int nbCompAdded, int Id) throws RemoteException;
+    
+    public List<commun.Stock> findAllByFamilleAndReference(String Famille, String Reference) throws RemoteException;
+
 }
