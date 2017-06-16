@@ -512,7 +512,11 @@ public class MainWindow extends javax.swing.JFrame {
             jLabel2.setText("Les champs obligatoire ne sont pas remplis");
             return;
         }
-       
+        if(currentTotalFacture == 0){
+            jLabel2.setText("Aucun produit n'a été sélectionné");
+            return;
+        }
+        
         try {
             factureInterface.AddFacture(NomFacture.getText(), AdresseFacture.getText(), currentTotalFacture);
             currentTotalFacture = 0;
