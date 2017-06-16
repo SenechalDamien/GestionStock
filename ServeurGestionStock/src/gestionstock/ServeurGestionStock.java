@@ -21,16 +21,12 @@ public class ServeurGestionStock {
      */
     public static void main(String[] args) {
         String ip = "";
-        String port = "";
+        String port = "1099";
         if(args.length > 1){
             ip = args[0];
             System.out.println(ip);
-            port = args[1];
-            System.out.println(port);
 
         }
-        if(port.isEmpty())
-            port = "1099";
         if(ip.isEmpty())
             ip = "localhost";
         try { 
