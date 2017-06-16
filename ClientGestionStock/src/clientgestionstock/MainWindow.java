@@ -549,6 +549,7 @@ public class MainWindow extends javax.swing.JFrame {
         }
         // total a 0
         currentTotalFacture = 0;
+        productsInTheCurrentFacture.clear();
         jLabel7.setText(Float.toString(currentTotalFacture));
     }//GEN-LAST:event_AnnulerFactureActionPerformed
 
