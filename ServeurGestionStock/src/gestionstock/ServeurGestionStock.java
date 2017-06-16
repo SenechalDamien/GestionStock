@@ -20,8 +20,22 @@ public class ServeurGestionStock {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        try {
-            java.rmi.registry.LocateRegistry.createRegistry(1099);
+        String ip = "";
+        String port = "";
+        if(args.length > 1){
+            ip = args[0];
+            System.out.println(ip);
+            port = args[1];
+            System.out.println(port);
+
+        }
+        if(port.isEmpty())
+            port = "1099";
+        if(ip.isEmpty())
+            ip = "localhost";
+        try { 
+            //1099
+            java.rmi.registry.LocateRegistry.createRegistry(Integer.parseInt(port));
             System.out.println("RMI registry ready.");
         } catch (Exception e) {
             System.out.println("Exception starting RMI registry:");
@@ -30,10 +44,10 @@ public class ServeurGestionStock {
 
         try {
             AccesFacture accesFacture = new AccesFacture();
-            Naming.rebind("rmi://localhost/AccesFacture", accesFacture);
+            Naming.rebind("rmi://"+ip+"/AccesFacture", accesFacture);
             
             AcessStock accesStock = new AcessStock();
-            Naming.rebind("rmi://localhost/AccesStock", accesStock);
+            Naming.rebind("rmi://"+ip+"/AccesStock", accesStock);
 
             System.out.println("GestionStock Server is ready.");
         } catch (Exception e) {

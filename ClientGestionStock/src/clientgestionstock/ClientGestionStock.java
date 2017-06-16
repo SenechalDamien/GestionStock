@@ -35,7 +35,12 @@ public class ClientGestionStock {
         
            java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainWindow().setVisible(true);
+                String ip = "";
+                if(args.length > 0)
+                    ip = args[0];
+                if(ip.isEmpty())
+                    ip = "localhost";
+                new MainWindow(ip).setVisible(true);                
             }
         });
     }

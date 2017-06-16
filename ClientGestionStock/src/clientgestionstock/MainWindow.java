@@ -38,13 +38,14 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Creates new form MainWindow
      */
-    public MainWindow() {
+    public MainWindow(String ip) {
         productsInTheCurrentFacture = new HashMap<Stock, Integer>();
         this.componentTableModel = new ComponentTableModel();
         factureTableModel = new FactureTableModel();
         initComponents();
+        
         try {
-            Remote r = Naming.lookup("rmi://localhost/AccesStock");
+            Remote r = Naming.lookup("rmi://"+ip+"/AccesStock");
             System.out.println(r);
             if(r instanceof AccesStockInterface) {
                 stockInterface = (AccesStockInterface) r;
@@ -54,7 +55,7 @@ public class MainWindow extends javax.swing.JFrame {
 
             }
                 
-            Remote r2 = Naming.lookup("rmi://localhost/AccesFacture");
+            Remote r2 = Naming.lookup("rmi://"+ip+"/AccesFacture");
             System.out.println(r2);
             if (r2 instanceof AccesFactureInterface) {
                 factureInterface = (AccesFactureInterface) r2;
@@ -70,6 +71,7 @@ public class MainWindow extends javax.swing.JFrame {
         } catch (NotBoundException e){
             e.printStackTrace();
         }
+        
         componentTableModel.setComponentList(currentComponentList);
         jTable1.setModel(componentTableModel);
         
